@@ -1,10 +1,6 @@
 ﻿using ApiConsumer_DragonBallApi.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
-using System.Net.Security;
 namespace ApiConsumer_DragonBallApi.Controllers
 {
     public class PersonajeController : Controller
@@ -26,8 +22,8 @@ namespace ApiConsumer_DragonBallApi.Controllers
                 BaseAddress = new Uri("https://dragonball-api.com/api")
             };
 
-           // _httpClient.DefaultRequestHeaders.Accept.Clear();
-           // _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            // _httpClient.DefaultRequestHeaders.Accept.Clear();
+            // _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public async Task<IActionResult> Index()
@@ -40,10 +36,10 @@ namespace ApiConsumer_DragonBallApi.Controllers
                 {
                     var content = await response.Content.ReadAsStringAsync();
                     var listado = JsonConvert.DeserializeObject<PersonajesResponse>(content);
-                    
+
                     Personaje[] personajes = listado.items;
                     return View(personajes);
-                    
+
                 }
 
                 return NotFound();
@@ -60,19 +56,30 @@ namespace ApiConsumer_DragonBallApi.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var response = await _httpClient.GetAsync($"api/characters/{id}");
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var json = await response.Content.ReadAsStringAsync();
+                var response = await _httpClient.GetAsync($"api/characters/{id}");
 
-                var personaje = JsonConvert.DeserializeObject<Personaje>(json);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
 
-                return View(personaje);
+                    var personaje = JsonConvert.DeserializeObject<Personaje>(json);
+
+                    return View(personaje);
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
-            else
+            catch (HttpRequestException ex)
             {
-                return NotFound();
+                return StatusCode(500, $"Error inesperado: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error inesperado: {ex.Message}");
             }
         }
     }
