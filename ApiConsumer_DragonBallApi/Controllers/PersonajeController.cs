@@ -57,5 +57,23 @@ namespace ApiConsumer_DragonBallApi.Controllers
                 return StatusCode(500, $"Error inesperado: {ex.Message}");
             }
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var response = await _httpClient.GetAsync($"api/characters/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+
+                var personaje = JsonConvert.DeserializeObject<Personaje>(json);
+
+                return View(personaje);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }

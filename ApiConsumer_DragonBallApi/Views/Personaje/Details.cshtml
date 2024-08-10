@@ -1,0 +1,34 @@
+﻿@model Personaje
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Historia del Personaje</h1>
+<hr />
+
+@* <div class="row">
+    <div class="col-3">
+        <img src="@Model.image"/>
+    </div>
+    <div class="col-8">
+        <h3>@Model.name</h3>
+        <p>@Model.description</p>
+    </div>
+</div> *@
+
+<div class="card mb-3" style="max-width: 1000px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="@Model.image" class="img-fluid rounded-start" alt="@Model.name">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title text-primary">@Model.name</h5>
+                <p class="card-text">@Model.description</p>
+                <p class="card-text">Raza: <small class="text-body-secondary">@Model.race</small></p>
+                <p class="card-text">Ki: <small class="text-body-secondary">@Model.ki</small></p>
+                
+            </div>
+        </div>
+    </div>
+</div>
