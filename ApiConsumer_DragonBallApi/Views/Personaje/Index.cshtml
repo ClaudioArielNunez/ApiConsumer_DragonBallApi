@@ -1,17 +1,36 @@
-﻿@model ApiConsumer_DragonBallApi.Models.Entities.Personaje
+﻿@model IEnumerable<Personaje>
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 class="text-center">Personajes Principales</h1>
 <hr />
 
-<div class="card" style="width: 18rem;">
-    <img src="@Model.image" class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title">@Model.name</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+
+@if (Model != null)
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var personaje in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <img src="@personaje.image" class="card-img-top h-100" alt="@personaje.name">
+                    <div class="card-body">
+                        <h5 class="card-title">@personaje.name</h5>
+                        <p>Planeta: @personaje.race</p>
+                        <p>Poder: @personaje.ki</p>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-</div>
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        No esta cargado el modelo del ViewModel!
+    </div>
+}
+
+
 
